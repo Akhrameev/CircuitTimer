@@ -119,7 +119,10 @@
     NSInteger seconds = [values[indexPath.row][1] integerValue];
     NSString *formattedTime = @"";
     
-    if(seconds/60 == 0)
+    if(seconds/60 == 0) {
+      [cell.txtMinutes setText:@""];
+      [cell.txtSeconds setText:[NSString stringWithFormat:@"%@", seconds]];
+    }
       formattedTime = [NSString stringWithFormat:@":%02d", seconds];
     else if(seconds/60 >= 60)
       formattedTime = [NSString stringWithFormat:@"%d:%02d:%02d", seconds/3600, (seconds%3600)/60, (seconds%3600)%60];

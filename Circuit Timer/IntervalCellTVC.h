@@ -16,6 +16,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnEdit;
 
 @property (weak, nonatomic) IBOutlet UITextField *txtAction;
-@property (weak, nonatomic) IBOutlet UITextField *txtDuration;
 
+@property (weak, nonatomic) IBOutlet UITextField *txtEndStep;
+@property (weak, nonatomic) IBOutlet UITextField *txtStartStep;
+@property (weak, nonatomic) IBOutlet UILabel *lblColon;
+@property (weak, nonatomic) IBOutlet UITextField *txtMinutes;
+@property (weak, nonatomic) IBOutlet UITextField *txtSeconds;
+@property (weak, nonatomic) IBOutlet UILabel *lblSteps;
 @end
