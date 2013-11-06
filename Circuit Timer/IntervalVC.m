@@ -9,7 +9,7 @@
 #import "IntervalVC.h"
 @implementation IntervalVC
 
-@synthesize tblIntervals;
+@synthesize tblIntervals, data, selected_index;
 
 - (void)viewDidLoad
 {
@@ -17,18 +17,25 @@
   [super setEditing:YES];
   [tblIntervals setEditing:YES];
   
-  UIColor *myGreen = [UIColor colorWithRed:106.0/255.0 green:181.0/255.0 blue:88.0/255.0 alpha:1];
-  UIColor *myRed = [UIColor colorWithRed:216.0/255.0 green:110.0/255.0 blue:110.0/255.0 alpha:1];
-  //UIColor *myBlue = [UIColor colorWithRed:99.0/255.0 green:168.0/255.0 blue:229.0/255.0 alpha:1];
-  UIColor *myYellow = [UIColor colorWithRed:216.0/255.0 green:213.0/255.0 blue:110.0/255.0 alpha:1];
+  myGreen = [UIColor colorWithRed:106.0/255.0 green:181.0/255.0 blue:88.0/255.0 alpha:1];
+  myRed = [UIColor colorWithRed:216.0/255.0 green:110.0/255.0 blue:110.0/255.0 alpha:1];
+  myBlue = [UIColor colorWithRed:99.0/255.0 green:168.0/255.0 blue:229.0/255.0 alpha:1];
+  myYellow = [UIColor colorWithRed:216.0/255.0 green:213.0/255.0 blue:110.0/255.0 alpha:1];
+
+
   
-  NSMutableArray *one = [[NSMutableArray alloc] initWithObjects:@"Crunches", @180, myGreen, nil];
-  NSMutableArray *two = [[NSMutableArray alloc] initWithObjects:@"Mountain Climbers", @120, myRed, nil];
-  NSMutableArray *three = [[NSMutableArray alloc] initWithObjects:@"Rest", @30, myYellow, nil];
-  NSMutableArray *four = [[NSMutableArray alloc] initWithObjects:@"Repeat", @1, @3, nil];
-  NSMutableArray *five = [[NSMutableArray alloc] initWithObjects:@"Pull Ups", @90, myGreen, nil];
-  values = [[NSMutableArray alloc] initWithObjects:one, two, three, four, five, nil];
-	// Do any additional setup after loading the view, typically from a nib.
+  i = [selected_index integerValue];
+  
+  if( i == -1) {
+    [data addObject:[[NSMutableArray alloc] initWithObjects:@"New Workout", [[NSMutableArray alloc] initWithObjects:[[NSMutableArray alloc] initWithObjects:@"Workout", @0, myGreen, nil], nil], nil]];
+    i = [data count] - 1;
+  }
+  
+  workout_name = data[i][0];
+  intervals = data[i][1];
+  
+  [tblIntervals reloadData];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -42,23 +49,20 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  if([values count] != 0)
-   return [values count];
-  
-  return 5;
+  return [intervals count];
 }
 
-- (NSInteger) numberOfComponentsInPickerView:(UIPickerView *)pickerView {
-  return 3;
-}
-
-- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
-  return 60;
-}
-
-- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-  return [NSString stringWithFormat:@"%02d", row];
-}
+//- (NSInteger) numberOfComponentsInPickerView:(UIPickerView *)pickerView {
+//  return 3;
+//}
+//
+//- (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component{
+//  return 60;
+//}
+//
+//- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
+//  return [NSString stringWithFormat:@"%02d", row];
+//}
 
 
 
@@ -95,41 +99,47 @@
   
   [cell setShowsReorderControl:YES];
   
-  // Remove gray table seperators
-  [tableView setSeparatorColor:[UIColor clearColor]];
-  
   // Configure Cell
-  //[cell.lblAction setText:[NSString stringWithFormat:@"%i. %@", indexPath.row+1, values[indexPath.row][0]]];
   [cell.lblNumber setText:[NSString stringWithFormat:@"%i.", indexPath.row+1]];
-  [cell.txtAction setText:[NSString stringWithFormat:@"%@", values[indexPath.row][0]]];
+  [cell.txtAction setText:[NSString stringWithFormat:@"%@", intervals[indexPath.row][0]]];
   [cell.btnDelete setTag:indexPath.row];
   [cell.btnDelete addTarget:self action:@selector(deleteInterval:) forControlEvents:UIControlEventTouchUpInside];
   [cell.btnEdit setTag:indexPath.row];
   [cell.btnEdit addTarget:self action:@selector(editInterval:) forControlEvents:UIControlEventTouchUpInside];
   
   [cell.txtAction setEnabled:NO];
-  [cell.txtDuration setEnabled:NO];
   
-  if([values[indexPath.row][0] isEqualToString:@"Repeat"]) {
-    [cell.txtDuration setText:[NSString stringWithFormat:@"Steps %@-%@", values[indexPath.row][1], values[indexPath.row][2]]];
+  if([intervals[indexPath.row][0] isEqualToString:@"Repeat"]) {
+    [cell.txtStartStep setText:[NSString stringWithFormat:@"%@", intervals[indexPath.row][1]]];
+    [cell.txtEndStep setText:[NSString stringWithFormat:@"%@", intervals[indexPath.row][2]]];
+    
+    [cell.txtStartStep setEnabled:NO];
+    [cell.txtEndStep setEnabled:NO];
+    
+    [cell.lblColon setHidden:YES];
+    [cell.txtMinutes setHidden:YES];
+    [cell.txtSeconds setHidden:YES];
   }
   else {
-    [cell.imgColor setBackgroundColor:values[indexPath.row][2]];
+    [cell.imgColor setBackgroundColor:intervals[indexPath.row][2]];
   
-    NSInteger seconds = [values[indexPath.row][1] integerValue];
-    NSString *formattedTime = @"";
+    NSInteger seconds = [intervals[indexPath.row][1] integerValue];
     
     if(seconds/60 == 0) {
       [cell.txtMinutes setText:@""];
-      [cell.txtSeconds setText:[NSString stringWithFormat:@"%@", seconds]];
+      [cell.txtSeconds setText:[NSString stringWithFormat:@"%02d", seconds]];
     }
-      formattedTime = [NSString stringWithFormat:@":%02d", seconds];
-    else if(seconds/60 >= 60)
-      formattedTime = [NSString stringWithFormat:@"%d:%02d:%02d", seconds/3600, (seconds%3600)/60, (seconds%3600)%60];
-    else
-      formattedTime = [NSString stringWithFormat:@"%d:%02d", seconds/60, seconds%60];
+    else {
+      [cell.txtMinutes setText:[NSString stringWithFormat:@"%d", seconds/60]];
+      [cell.txtSeconds setText:[NSString stringWithFormat:@"%02d", seconds%60]];
+    }
     
-    [cell.txtDuration setText:formattedTime];
+    [cell.txtMinutes setEnabled:NO];
+    [cell.txtSeconds setEnabled:NO];
+    
+    [cell.lblSteps setHidden:YES];
+    [cell.txtStartStep setHidden:YES];
+    [cell.txtEndStep setHidden:YES];
   }
   
   // Adding an empty footer prevents any cells beyond what's needed
@@ -138,11 +148,11 @@
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
-  NSMutableArray *holder = values[sourceIndexPath.row];
-  [values removeObjectAtIndex:sourceIndexPath.row];
-  [values insertObject:holder atIndex:destinationIndexPath.row];
+  NSMutableArray *holder = intervals[sourceIndexPath.row];
+  [intervals removeObjectAtIndex:sourceIndexPath.row];
+  [intervals insertObject:holder atIndex:destinationIndexPath.row];
+  [self saveChanges];
   [tblIntervals reloadData];
-  
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -161,43 +171,114 @@
   return UITableViewCellEditingStyleNone;
 }
 
-
-- (IBAction)pushAddWorkout:(id)sender {
-  [self performSegueWithIdentifier:@"LandingVC_IntervalVC" sender:nil];
-}
 - (IBAction)pushAddRepeat:(id)sender {
-  [tblIntervals setEditing:YES animated:YES];
+  NSMutableArray *new_interval = [[NSMutableArray alloc] initWithObjects:@"Repeat",@1, @1, nil];
+  [intervals addObject:new_interval];
+  //[tblIntervals setEditing:YES animated:YES];
+  [tblIntervals reloadData];
+  [self saveChanges];
 }
 
 - (IBAction)pushAddInterval:(id)sender {
-  [tblIntervals setEditing:NO animated:NO];
+  NSMutableArray *new_interval = [[NSMutableArray alloc] initWithObjects:@"Workout",@180, myGreen, nil];
+  [intervals addObject:new_interval];
+  //[tblIntervals setEditing:NO animated:NO];
+  [tblIntervals reloadData];
+  [self saveChanges];
 }
 
 - (void) editInterval:(id)sender {
   UIButton *pressed = (UIButton*)sender;
+  NSIndexPath *row = [NSIndexPath indexPathForRow:pressed.tag inSection:0];
   
-  IntervalCellTVC *editing= (IntervalCellTVC*)[tblIntervals cellForRowAtIndexPath:[NSIndexPath indexPathForRow:pressed.tag inSection:0]];
+  IntervalCellTVC *editing= (IntervalCellTVC*)[tblIntervals cellForRowAtIndexPath:row];
+  
   
   if([pressed.currentTitle isEqual:@"Edit"]) {
     [pressed setTitle:@"Done" forState:UIControlStateNormal];
-    [editing.txtDuration setEnabled:YES];
-    [editing.txtAction setEnabled:YES];
-    [editing.txtAction becomeFirstResponder];
+    
+    if([editing.txtAction.text isEqualToString:@"Repeat"]) {
+      [editing.txtStartStep setEnabled:YES];
+      [editing.txtEndStep setEnabled:YES];
+      [editing.txtStartStep becomeFirstResponder];
+    }
+    else {
+      [editing.txtAction setEnabled:YES];
+      [editing.txtMinutes setEnabled:YES];
+      [editing.txtSeconds setEnabled:YES];
+      [editing.txtAction becomeFirstResponder];
+    }
+    
+    [editing.btnDelete setHidden:NO];
+    
+    CGRect frame = tblIntervals.frame;
+    frame.size.height = 352;
+    [UIView animateWithDuration:.3 animations:^{
+      [tblIntervals setFrame:frame];
+    }];
+    
+    [tblIntervals scrollToRowAtIndexPath:row atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
   }
   else {
+    NSMutableArray *new_interval = [[NSMutableArray alloc] init];
     [pressed setTitle:@"Edit" forState:UIControlStateNormal];
-    [editing.txtDuration setEnabled:NO];
-    [editing.txtAction setEnabled:NO];
+    
+    if(![editing.txtAction isEnabled]) {
+      [editing.txtStartStep setEnabled:NO];
+      [editing.txtEndStep setEnabled:NO];
+      
+      new_interval = [[NSMutableArray alloc] initWithObjects:
+                    editing.txtAction.text,
+                    editing.txtStartStep.text,
+                    editing.txtEndStep.text,
+                    intervals[pressed.tag][2],
+                    nil];
+    }
+    else {
+      [editing.txtAction setEnabled:NO];
+      [editing.txtMinutes setEnabled:NO];
+      [editing.txtSeconds setEnabled:NO];
+      
+      NSString *action = editing.txtAction.text;
+      NSNumber *duration = [NSNumber numberWithInt:[editing.txtMinutes.text integerValue] * 60 + [editing.txtSeconds.text integerValue]];
+      
+      [new_interval addObject:action];
+      [new_interval addObject:duration];
+      [new_interval addObject:intervals[pressed.tag][2]];
+    }
+    
+    [editing.btnDelete setHidden:YES];
+    
+    CGRect frame = tblIntervals.frame;
+    frame.size.height = 512;
+    [UIView animateWithDuration:.3 animations:^{
+      [tblIntervals setFrame:frame];
+    }];
+    
+    [intervals removeObjectAtIndex:pressed.tag];
+    [intervals insertObject:new_interval atIndex:pressed.tag];
+    
+    [self saveChanges];
   }
-  
 }
 
 - (void) deleteInterval:(id)sender {
   UIButton *pressed = (UIButton*)sender;
-  NSLog (@"%i", pressed.tag);
-  [values removeObjectAtIndex:pressed.tag];
-  NSLog(@"%@", values);
+  [intervals removeObjectAtIndex:pressed.tag];
+  NSLog(@"%@", intervals);
+  [self saveChanges];
   [tblIntervals reloadData];
+}
+
+- (void)saveChanges {
+  
+  [data removeObjectAtIndex:i];
+  [data insertObject:[[NSMutableArray alloc] initWithObjects:workout_name, intervals, nil] atIndex:i];
+  
+  NSData *data_to_save = [NSKeyedArchiver archivedDataWithRootObject:data];
+  
+  NSUserDefaults *save = [NSUserDefaults standardUserDefaults];
+  [save setObject:data_to_save forKey:@"data"];
 }
 
 @end

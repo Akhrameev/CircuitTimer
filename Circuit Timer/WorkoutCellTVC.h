@@ -12,4 +12,6 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *lblWorkoutName;
 
+@property (weak, nonatomic) IBOutlet UIButton *btnEdit;
+
 @end

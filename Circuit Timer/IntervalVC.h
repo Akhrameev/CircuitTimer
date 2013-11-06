@@ -12,10 +12,20 @@
 #import "SubviewFinder.h"
 
 @interface IntervalVC : UIViewController <UITableViewDataSource, UITableViewDelegate> {
-  NSMutableArray *values;
+  NSInteger i;
+  NSString *workout_name;
+  NSMutableArray *intervals;
+  
+  UIColor *myGreen;
+  UIColor *myRed;
+  UIColor *myBlue;
+  UIColor *myYellow;
+
 }
 
 @property (weak, nonatomic) IBOutlet UITableView *tblIntervals;
+@property (weak, nonatomic) NSMutableArray *data;
+@property (weak, nonatomic) NSNumber *selected_index;
 
 - (IBAction)pushAddRepeat:(id)sender;
 - (IBAction)pushAddInterval:(id)sender;

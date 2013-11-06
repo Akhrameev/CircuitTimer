@@ -8,8 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "WorkoutCellTVC.h"
+#import "IntervalVC.h"
 
-@interface LandingVC : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface LandingVC : UIViewController <UITableViewDataSource, UITableViewDelegate> {
+  NSMutableArray *data;
+  NSNumber *selected_index;
+}
+
+@property (weak, nonatomic) IBOutlet UITableView *tblWorkouts;
 
 - (IBAction)pushAddWorkout:(id)sender;
 
