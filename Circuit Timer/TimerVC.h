@@ -10,6 +10,7 @@
 
 @interface TimerVC : UIViewController {
   NSInteger i;
+  NSInteger j;
   NSString *workout_name;
   NSMutableArray *intervals;
 }
