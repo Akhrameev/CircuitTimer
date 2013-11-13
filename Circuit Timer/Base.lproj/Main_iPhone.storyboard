@@ -114,7 +114,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="tblWorkouts" destination="U4w-En-4qu" id="hka-TR-dJO"/>
-                        <segue destination="jLv-SZ-8Gg" kind="push" identifier="pushTimerVC" id="Juy-m0-ggK"/>
+                        <segue destination="jLv-SZ-8Gg" kind="push" identifier="LandingVC_TimerVC" id="Juy-m0-ggK"/>
                         <segue destination="a4Q-38-g5d" kind="push" identifier="LandingVC_IntervalVC" id="JgS-Tt-Qts"/>
                     </connections>
                 </viewController>
@@ -295,10 +295,10 @@
             </objects>
             <point key="canvasLocation" x="1445" y="-163"/>
         </scene>
-        <!--View Controller-->
+        <!--TimerVC-->
         <scene sceneID="MZZ-ed-glb">
             <objects>
-                <viewController id="jLv-SZ-8Gg" sceneMemberID="viewController">
+                <viewController id="jLv-SZ-8Gg" customClass="TimerVC" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="obN-1H-cUd"/>
                         <viewControllerLayoutGuide type="bottom" id="Xz1-1Y-eqh"/>
@@ -306,9 +306,52 @@
                     <view key="view" contentMode="scaleToFill" id="Hn9-gv-pt7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="3:00" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lfd-d9-pCP">
+                                <rect key="frame" x="139" y="179" width="34" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Mountain Climbers - 2:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L6u-0J-ViZ">
+                                <rect key="frame" x="0.0" y="529" width="320" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="5" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wfK-xw-hTe">
+                                <rect key="frame" x="290" y="483" width="10" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZx-Vc-ogX">
+                                <rect key="frame" x="114" y="269" width="71" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Start/Stop">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="pressedStartStop:" destination="jLv-SZ-8Gg" eventType="touchUpInside" id="XM8-uM-idy"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Crunches" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DNO-71-euE">
+                                <rect key="frame" x="107" y="220" width="74" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="3w3-rg-VfG"/>
+                    <connections>
+                        <outlet property="lblInterval" destination="DNO-71-euE" id="peJ-Iw-NFO"/>
+                        <outlet property="lblNextInterval" destination="L6u-0J-ViZ" id="p4H-sI-eJY"/>
+                        <outlet property="lblSets" destination="wfK-xw-hTe" id="sQG-E5-7ez"/>
+                        <outlet property="lblTimer" destination="Lfd-d9-pCP" id="vdi-Og-0Bf"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tt6-o9-qLB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

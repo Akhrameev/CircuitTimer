@@ -19,6 +19,9 @@
 - (void)viewDidLoad
 {
   [super viewDidLoad];
+  
+  //NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+  //[[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
 
 }
 
@@ -79,8 +82,8 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-  //selected_index = [NSNumber numberWithInteger:indexPath.row];
-  //[self performSegueWithIdentifier:@"LandingVC_IntervalVC" sender:nil];
+  selected_index = [NSNumber numberWithInteger:indexPath.row];
+  [self performSegueWithIdentifier:@"LandingVC_TimerVC" sender:nil];
 }
 
 - (IBAction)pushAddWorkout:(id)sender {
@@ -95,9 +98,17 @@
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-  IntervalVC *ivc = [segue destinationViewController];
-  [ivc setSelected_index:selected_index];
-  [ivc setData:data];
+  
+  if([segue.identifier isEqualToString:@"LandingVC_IntervalVC"]) {
+    IntervalVC *ivc = [segue destinationViewController];
+    [ivc setSelected_index:selected_index];
+    [ivc setData:data];
+  }
+  else if([segue.identifier isEqualToString:@"LandingVC_TimerVC"]) {
+    TimerVC *tvc = [segue destinationViewController];
+    [tvc setSelected_index:selected_index];
+    [tvc setData:data];
+  }
 }
 
 @end

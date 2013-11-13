@@ -25,6 +25,7 @@
 		CB0C833C1825D0F9005B3B4F /* IntervalCellTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CB0C833B1825D0F9005B3B4F /* IntervalCellTVC.m */; };
 		CB0C833F1825D125005B3B4F /* IntervalVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CB0C833E1825D125005B3B4F /* IntervalVC.m */; };
 		CB0C83411825DFB1005B3B4F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CB0C83401825DFB1005B3B4F /* QuartzCore.framework */; };
+		CB401CB0182D919700FBA8BF /* TimerVC.m in Sources */ = {isa = PBXBuildFile; fileRef = CB401CAF182D919700FBA8BF /* TimerVC.m */; };
 		CB9A9F4B1826A769002F66E3 /* SubviewFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9A9F4A1826A769002F66E3 /* SubviewFinder.m */; };
 /* End PBXBuildFile section */
 
@@ -65,6 +66,8 @@
 		CB0C833D1825D125005B3B4F /* IntervalVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IntervalVC.h; sourceTree = "<group>"; };
 		CB0C833E1825D125005B3B4F /* IntervalVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IntervalVC.m; sourceTree = "<group>"; };
 		CB0C83401825DFB1005B3B4F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CB401CAE182D919700FBA8BF /* TimerVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimerVC.h; sourceTree = "<group>"; };
+		CB401CAF182D919700FBA8BF /* TimerVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimerVC.m; sourceTree = "<group>"; };
 		CB9A9F491826A769002F66E3 /* SubviewFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SubviewFinder.h; path = "Circuit Timer/SubviewFinder.h"; sourceTree = "<group>"; };
 		CB9A9F4A1826A769002F66E3 /* SubviewFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SubviewFinder.m; path = "Circuit Timer/SubviewFinder.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -135,6 +138,8 @@
 				CB0C83111825A34A005B3B4F /* Main_iPhone.storyboard */,
 				CB0C83171825A34A005B3B4F /* LandingVC.h */,
 				CB0C83181825A34A005B3B4F /* LandingVC.m */,
+				CB401CAE182D919700FBA8BF /* TimerVC.h */,
+				CB401CAF182D919700FBA8BF /* TimerVC.m */,
 				CB0C83371825CBC8005B3B4F /* WorkoutCellTVC.h */,
 				CB0C83381825CBC8005B3B4F /* WorkoutCellTVC.m */,
 				CB0C831A1825A34A005B3B4F /* Images.xcassets */,
@@ -279,6 +284,7 @@
 				CB0C830C1825A34A005B3B4F /* main.m in Sources */,
 				CB0C833C1825D0F9005B3B4F /* IntervalCellTVC.m in Sources */,
 				CB0C83391825CBC8005B3B4F /* WorkoutCellTVC.m in Sources */,
+				CB401CB0182D919700FBA8BF /* TimerVC.m in Sources */,
 				CB0C833F1825D125005B3B4F /* IntervalVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

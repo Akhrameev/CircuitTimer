@@ -21,8 +21,6 @@
   myRed = [UIColor colorWithRed:216.0/255.0 green:110.0/255.0 blue:110.0/255.0 alpha:1];
   myBlue = [UIColor colorWithRed:99.0/255.0 green:168.0/255.0 blue:229.0/255.0 alpha:1];
   myYellow = [UIColor colorWithRed:216.0/255.0 green:213.0/255.0 blue:110.0/255.0 alpha:1];
-
-
   
   i = [selected_index integerValue];
   
@@ -68,16 +66,19 @@
 
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+  
+  [tblIntervals setEditing:YES animated:YES];
+  
 	//	Grip customization code goes in here...
 	UIView* reorderControl = [cell huntedSubviewWithClassName:@"UITableViewCellReorderControl"];
-	[reorderControl setBackgroundColor:[UIColor greenColor]];
+	//[reorderControl setBackgroundColor:[UIColor greenColor]];
   
 	//UIView* resizedGripView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetMaxX(reorderControl.frame), CGRectGetMaxY(reorderControl.frame))];
   UIView* resizedGripView = [[UIView alloc] initWithFrame:CGRectMake(0, 15, CGRectGetMaxX(reorderControl.frame), 20)];
   //[resizedGripView setBackgroundColor:[UIColor redColor]];
 	[resizedGripView addSubview :reorderControl];
-  // [cell insertSubview:resizedGripView atIndex:0];
-	// [cell addSubview:resizedGripView];
+  [cell insertSubview:resizedGripView atIndex:0];
+	[cell addSubview:resizedGripView];
   
   CGAffineTransform transform = CGAffineTransformIdentity;
   transform = CGAffineTransformScale(transform, 3.7, 1);
@@ -104,16 +105,23 @@
   [cell.txtAction setText:[NSString stringWithFormat:@"%@", intervals[indexPath.row][0]]];
   [cell.btnDelete setTag:indexPath.row];
   [cell.btnDelete addTarget:self action:@selector(deleteInterval:) forControlEvents:UIControlEventTouchUpInside];
+  [cell.btnDelete setHidden:YES];
   [cell.btnEdit setTag:indexPath.row];
+  [cell.btnEdit setTitle:@"Edit" forState:UIControlStateNormal];
   [cell.btnEdit addTarget:self action:@selector(editInterval:) forControlEvents:UIControlEventTouchUpInside];
   
   [cell.txtAction setEnabled:NO];
   
   if([intervals[indexPath.row][0] isEqualToString:@"Repeat"]) {
-    [cell.txtStartStep setText:[NSString stringWithFormat:@"%@", intervals[indexPath.row][1]]];
-    [cell.txtEndStep setText:[NSString stringWithFormat:@"%@", intervals[indexPath.row][2]]];
+    [cell.imgColor setBackgroundColor:intervals[indexPath.row][1]];
     
+    [cell.txtStartStep setText:[NSString stringWithFormat:@"%@", intervals[indexPath.row][2]]];
+    [cell.txtEndStep setText:[NSString stringWithFormat:@"%@", intervals[indexPath.row][3]]];
+    
+    [cell.lblSteps setHidden:NO];
+    [cell.txtStartStep setHidden:NO];
     [cell.txtStartStep setEnabled:NO];
+    [cell.txtEndStep setHidden:NO];
     [cell.txtEndStep setEnabled:NO];
     
     [cell.lblColon setHidden:YES];
@@ -128,13 +136,18 @@
     if(seconds/60 == 0) {
       [cell.txtMinutes setText:@""];
       [cell.txtSeconds setText:[NSString stringWithFormat:@"%02d", seconds]];
+      // NSLog(@"%ld. %ld", (long)indexPath.row, (long)seconds);
     }
     else {
       [cell.txtMinutes setText:[NSString stringWithFormat:@"%d", seconds/60]];
       [cell.txtSeconds setText:[NSString stringWithFormat:@"%02d", seconds%60]];
+      // NSLog(@"%ld. %ld", (long)indexPath.row, (long)seconds);
     }
     
+    [cell.lblColon setHidden:NO];
+    [cell.txtMinutes setHidden:NO];
     [cell.txtMinutes setEnabled:NO];
+    [cell.txtSeconds setHidden:NO];
     [cell.txtSeconds setEnabled:NO];
     
     [cell.lblSteps setHidden:YES];
@@ -152,7 +165,6 @@
   [intervals removeObjectAtIndex:sourceIndexPath.row];
   [intervals insertObject:holder atIndex:destinationIndexPath.row];
   [self saveChanges];
-  [tblIntervals reloadData];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -172,19 +184,18 @@
 }
 
 - (IBAction)pushAddRepeat:(id)sender {
-  NSMutableArray *new_interval = [[NSMutableArray alloc] initWithObjects:@"Repeat",@1, @1, nil];
+  NSMutableArray *new_interval = [[NSMutableArray alloc] initWithObjects:@"Repeat", [UIColor blackColor], @1 , @1, nil];
   [intervals addObject:new_interval];
-  //[tblIntervals setEditing:YES animated:YES];
-  [tblIntervals reloadData];
   [self saveChanges];
+  [tblIntervals scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([intervals count]-1) inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (IBAction)pushAddInterval:(id)sender {
   NSMutableArray *new_interval = [[NSMutableArray alloc] initWithObjects:@"Workout",@180, myGreen, nil];
   [intervals addObject:new_interval];
   //[tblIntervals setEditing:NO animated:NO];
-  [tblIntervals reloadData];
   [self saveChanges];
+  [tblIntervals scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:([intervals count]-1) inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void) editInterval:(id)sender {
@@ -229,9 +240,9 @@
       
       new_interval = [[NSMutableArray alloc] initWithObjects:
                     editing.txtAction.text,
+                    [UIColor blackColor],
                     editing.txtStartStep.text,
                     editing.txtEndStep.text,
-                    intervals[pressed.tag][2],
                     nil];
     }
     else {
@@ -265,9 +276,8 @@
 - (void) deleteInterval:(id)sender {
   UIButton *pressed = (UIButton*)sender;
   [intervals removeObjectAtIndex:pressed.tag];
-  NSLog(@"%@", intervals);
+  
   [self saveChanges];
-  [tblIntervals reloadData];
 }
 
 - (void)saveChanges {
@@ -279,6 +289,8 @@
   
   NSUserDefaults *save = [NSUserDefaults standardUserDefaults];
   [save setObject:data_to_save forKey:@"data"];
+  
+  [tblIntervals reloadData];
 }
 
 @end
