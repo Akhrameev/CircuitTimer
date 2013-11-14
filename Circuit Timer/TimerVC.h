@@ -13,6 +13,8 @@
   NSInteger j;
   NSString *workout_name;
   NSMutableArray *intervals;
+  BOOL running;
+  double time;
 }
 
 @property (weak, nonatomic) NSMutableArray *data;

@@ -30,20 +30,18 @@
   [super viewDidLoad];
   
   i = [selected_index integerValue];
-  workout_name = data[i][0];
-  intervals = data[i][1];
-  j = 0;
+  j = -1;
+  running = NO;
   
+  workout_name = data[i][0];
+  intervals = [[NSMutableArray alloc] initWithArray:data[i][1]];
   intervals = [self initiateRepeatsWithBase:intervals];
   
   NSInteger sets = 3;
-  
   [lblSets setText:[NSString stringWithFormat:@"%i", sets]];
-  [lblInterval setText:[NSString stringWithFormat:@"%@",intervals[j][0]]];
-  [lblTimer setText:[self formatTime:intervals[j][1]]];
-  [lblNextInterval setText:[NSString stringWithFormat:@"%@ - %@", intervals[j+1][0],[self formatTime:intervals[j+1][1]]]];
   
-  
+  [self nextInterval];
+
 	// Do any additional setup after loading the view.
 }
 
@@ -54,14 +52,69 @@
 }
 
 - (IBAction)pressedStartStop:(id)sender {
+  if(running)
+    running = NO;
+  else {
+    running = YES;
+    [self countdown];
+  }
 }
 
-- (NSString*)formatTime:(id)seconds {
-  NSInteger time = [seconds integerValue];
-  if(time/60 == 0)
-    return [NSString stringWithFormat:@":%02d", time];
+- (void)nextInterval {
+  j++;
   
-  return [NSString stringWithFormat:@"%d:%02d", (time/60), (time%60)];
+  if(j == [intervals count]-1) {
+    time = (double)[intervals[j][1] integerValue];
+    [lblInterval setText:[NSString stringWithFormat:@"%@",intervals[j][0]]];
+    [lblTimer setText:[self formatDisplayTime:intervals[j][1]]];
+    [lblNextInterval setText:@"Last Interval!"];
+  }
+  else if(j == [intervals count]) {
+    [lblInterval setText:@":00.0"];
+    [lblTimer setText:@"Complete"];
+    [lblNextInterval setText:@""];
+    running = NO;
+  }
+  else {
+    time = (double)[intervals[j][1] integerValue];
+    [lblInterval setText:[NSString stringWithFormat:@"%@",intervals[j][0]]];
+    [lblTimer setText:[self formatDisplayTime:intervals[j][1]]];
+    [lblNextInterval setText:[NSString stringWithFormat:@"%@ - %@", intervals[j+1][0],[self formatDisplayTime:intervals[j+1][1]]]];
+  }
+}
+
+- (NSString*)formatDisplayTime:(id)seconds {
+  
+  NSInteger format = [seconds integerValue];
+  if(format/60 == 0) {
+    return [NSString stringWithFormat:@":%.02d", format];
+  }
+  
+  return [NSString stringWithFormat:@"%d:%02d", (format/60), (format%60)];
+}
+
+- (void)countdown {
+  if([[NSString stringWithFormat:@"%.1f", time] isEqualToString:@"0.1"])
+    [self nextInterval];
+
+  if(!running)
+    return;
+  
+  time -= .1;
+  
+  NSString* display = @"";
+  
+  int seconds = round(time);
+  
+  if(seconds/60 == 0)
+    display = [NSString stringWithFormat:@"%.1f", time];
+  else
+    display = [NSString stringWithFormat:@"%d:%02d",(seconds/60),(seconds%60)];
+  
+  [lblTimer setText:[NSString stringWithFormat:@"%@",display]];
+  
+  
+  [self performSelector:@selector(countdown) withObject:self afterDelay:0.1];
 }
 
 - (NSMutableArray*)initiateRepeatsWithBase:(NSArray*)base {
